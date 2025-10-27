@@ -30,7 +30,7 @@ const RiskManagersIndex = () => {
       });
       const data = await res.json();
       if (!res.ok)
-        throw new Error(data?.error || "Erro ao listar gestores de risco");
+        throw new Error(data?.error || "Erro ao listar gerenciadoras de risco");
       setItems(data.riskManagers || data || []);
     } catch (e) {
       setErr(e.message);
@@ -67,7 +67,7 @@ const RiskManagersIndex = () => {
 
   return (
     <div className="dark-theme">
-      <h2>Gestores de Risco</h2>
+      <h2>Gerenciadora de Risco</h2>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <Form

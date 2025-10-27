@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
 
 const AppNavbar = () => {
-  const { token, logout, user } = useAuth();
+  const { token, logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const AppNavbar = () => {
     navigate("/login");
   };
 
-  const showAdmin = user && (user.role === "Admin" || user.role === "Manager");
+  //  const showAdmin = user && (user.role === "Admin" || user.role === "Manager");
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="mb-4 orange-accent">
@@ -42,15 +42,15 @@ const AppNavbar = () => {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/dashboard">
+            {/* <Nav.Link as={Link} to="/dashboard">
               Dashboard
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link as={Link} to="/attendances">
               Atendimentos
             </Nav.Link>
-            <Nav.Link as={Link} to="/settingList">
+            {/* <Nav.Link as={Link} to="/settingList">
               Campos
-            </Nav.Link>
+            </Nav.Link> */}
             <NavDropdown title="Cadastros" id="nav-dropdown-cadastros">
               <NavDropdown.Item as={Link} to="/brokers">
                 Corretores
@@ -71,7 +71,7 @@ const AppNavbar = () => {
                 Gerenciadores de Risco
               </NavDropdown.Item>
             </NavDropdown>
-            {showAdmin && (
+            {/* {showAdmin && (
               <NavDropdown title="Administração" id="nav-dropdown-admin">
                 <NavDropdown.Item as={Link} to="/userPanel">
                   Usuários
@@ -80,7 +80,7 @@ const AppNavbar = () => {
                   Logs
                 </NavDropdown.Item>
               </NavDropdown>
-            )}
+            )} */}
           </Nav>
           <Button className="btn-orange" onClick={handleLogout}>
             Logout
