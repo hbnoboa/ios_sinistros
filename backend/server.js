@@ -32,6 +32,7 @@ app.set("io", io);
 
 app.use(auditLog);
 
+// ========== ROTAS DA API ==========
 app.use("/api/users", userRoute);
 
 app.use(auth, tenantGuard);
@@ -46,24 +47,25 @@ app.use("/api/risk-managers", riskManagerRoute);
 app.use("/api/regulators", regulatorsRoute);
 app.use("/api/attendances/:attendanceId/files", attendanceFilesRoute);
 
-// 404 handler
-app.use((req, res) => res.status(404).json({ error: "Rota não encontrada" }));
+// ========== SERVIR ARQUIVOS ESTÁTICOS (PRODUÇÃO) ==========
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "frontend/build")));
 
-// Error handler opcional
+  // Catch-all para SPA (apenas em produção)
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
+  });
+} else {
+  // 404 handler para desenvolvimento
+  app.use((req, res) => {
+    res.status(404).json({ error: "Rota não encontrada" });
+  });
+}
+
+// ========== ERROR HANDLER GLOBAL ==========
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: "Erro interno" });
-});
-
-//if (process.env.NODE_ENV === "production") {
-//  app.use(express.static(path.join(__dirname, "frontend/build")));
-//  app.get("*", (req, res) => {
-//    res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
-//  });
-//}
-
-app.use((req, res) => {
-  res.status(404).json({ error: "Rota não encontrada" });
+  console.error("Erro capturado:", err);
+  res.status(500).json({ error: "Erro interno do servidor" });
 });
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
