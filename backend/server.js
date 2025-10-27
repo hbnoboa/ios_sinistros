@@ -32,11 +32,18 @@ app.set("io", io);
 
 app.use(auditLog);
 
-// ========== ROTAS DA API ==========
+// ========== ROTAS PÚBLICAS ==========
 app.use("/api/users", userRoute);
 
-app.use(auth, tenantGuard);
+// ========== SERVIR ARQUIVOS ESTÁTICOS (PRODUÇÃO) - ANTES DO AUTH ==========
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "frontend/build")));
+}
 
+// ========== MIDDLEWARE DE AUTENTICAÇÃO (APENAS ROTAS /api/*) ==========
+app.use("/api", auth, tenantGuard);
+
+// ========== ROTAS PROTEGIDAS ==========
 app.use("/api/shipping-companies", shippingCompanyRoute);
 app.use("/api/insureds", insuredRoute);
 app.use("/api/attendances", attendanceRoute);
@@ -47,11 +54,8 @@ app.use("/api/risk-managers", riskManagerRoute);
 app.use("/api/regulators", regulatorsRoute);
 app.use("/api/attendances/:attendanceId/files", attendanceFilesRoute);
 
-// ========== SERVIR ARQUIVOS ESTÁTICOS (PRODUÇÃO) ==========
+// ========== CATCH-ALL PARA SPA (PRODUÇÃO) ==========
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "frontend/build")));
-
-  // Catch-all para SPA (apenas em produção)
   app.use((req, res) => {
     res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
   });
