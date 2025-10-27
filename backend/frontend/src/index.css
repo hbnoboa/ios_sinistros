@@ -1,0 +1,187 @@
+:root {
+  --accent-orange: #ff8c00;
+}
+
+#F0764F {
+  background-color: #181818 !important;
+  color: #fff !important;
+}
+#F0764Ftable {
+  background-color: #232323 !important;
+  color: #fff !important;
+}
+#F0764Fth,
+#F0764Ftd {
+  background-color: #232323 !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+#F0764Fthead {
+  background-color: #181818 !important;
+}
+
+/* Acentos laranja */
+.orange-accent .navbar-brand {
+  color: #f0764f !important;
+}
+.orange-accent .nav-link:hover,
+.orange-accent .nav-link.active,
+.orange-accent .dropdown-item.active,
+.orange-accent .dropdown-item:active {
+  color: #f0764f !important;
+}
+.orange-accent .dropdown-menu {
+  background-color: #232323;
+  border-color: #444;
+}
+.orange-accent .dropdown-item {
+  color: #fff;
+}
+.orange-accent .dropdown-item:hover,
+.orange-accent .dropdown-item:focus {
+  background-color: rgba(255, 140, 0, 0.15);
+  color: #fff;
+}
+
+/* Botão laranja */
+.btn-orange {
+  background-color: #f0764f !important;
+  border-color: #f0764f !important;
+  color: #fff !important;
+}
+.btn-orange:hover {
+  background-color: #e07a00 !important;
+  border-color: #e07a00 !important;
+}
+
+/* Inputs escuros (email/senha, etc.) */
+#F0764F.form-control,
+.bg-dark .form-control {
+  background-color: #2b2b2b !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+.form-control:focus,
+.bg-dark .form-control:focus {
+  background-color: #2b2b2b !important;
+  color: #fff !important;
+  border-color: var(--accent-orange) !important;
+  box-shadow: 0 0 0 0.25rem rgba(240, 118, 79, 0.25) !important;
+}
+
+.form-control::placeholder,
+.bg-dark .form-control::placeholder {
+  color: #bdbdbd !important;
+}
+
+/* Selects escuros iguais aos inputs */
+#F0764F.form-select,
+.bg-dark .form-select,
+.form-select.bg-dark {
+  background-color: #2b2b2b !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+#F0764F.form-select:focus,
+.bg-dark .form-select:focus,
+.form-select.bg-dark:focus {
+  background-color: #2b2b2b !important;
+  color: #fff !important;
+  border-color: var(--accent-orange) !important;
+  box-shadow: 0 0 0 0.25rem rgba(240, 118, 79, 0.25) !important;
+}
+
+/* Opções do select (quando suportado pelo browser) */
+.bg-dark .form-select option,
+.form-select.bg-dark option {
+  background-color: #2b2b2b;
+  color: #fff;
+}
+
+/* Tabs com acento laranja e conteúdo escuro */
+.orange-tabs .nav-tabs .nav-link {
+  color: var(--accent-orange, #ff8c00);
+  border: 1px solid transparent;
+}
+.orange-tabs .nav-tabs .nav-link:hover {
+  color: #ffa666;
+}
+.orange-tabs .nav-tabs .nav-link.active,
+.orange-tabs .nav-tabs .nav-item.show .nav-link {
+  color: #fff;
+  background-color: #232323;
+  border-color: #444 #444 var(--accent-orange, #ff8c00);
+}
+.orange-tabs .tab-content {
+  background-color: #232323;
+  color: #fff;
+  border: 1px solid #444;
+  border-top: none;
+  padding: 1rem;
+}
+
+/* ListGroup escuro */
+.list-group-dark .list-group-item {
+  background-color: #232323 !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+.list-group-dark .list-group-item + .list-group-item {
+  border-top-color: #444 !important;
+}
+.list-group-dark .list-group-item a {
+  color: #ffa666;
+}
+.list-group-dark .list-group-item a:hover {
+  color: #ff8c00;
+}
+
+/* KPI cards */
+.kpi-card {
+  background-color: #232323 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+.kpi-label {
+  color: #bdbdbd;
+  font-size: 0.9rem;
+}
+.kpi-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Borda no botão dentro do input-group (reuso do Attendance Index) */
+.input-group .btn-bordered {
+  border: 1px solid var(--accent-orange, #ff8c00) !important;
+}
+
+.tabs-dark.nav-tabs {
+  border-bottom: 1px solid #444;
+  background: #1e1e1e;
+}
+.tabs-dark .nav-link {
+  color: #ffa666;
+  border: 1px solid transparent;
+}
+.tabs-dark .nav-link:hover {
+  color: #ff8c00;
+  border-color: #444 #444 #1e1e1e;
+  background: #222;
+}
+.tabs-dark .nav-link.active,
+.tabs-dark .nav-item.show .nav-link {
+  color: #ffa666;
+  background-color: #232323;
+  border-color: #ff8c00 #444 #232323;
+}
+
+.form-select.bg-dark {
+  border-color: #444 !important;
+}
+.form-select.bg-dark:focus {
+  border-color: #ff8c00 !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.15) !important;
+}
