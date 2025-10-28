@@ -693,13 +693,16 @@ const AttendanceNew = () => {
                       const name = e.target.value;
                       const sc =
                         shippers.find((s) => s.company_name === name) || null;
+
+                      // fallbacks: CNPJ pode estar em diferentes chaves
+                      const cnpj = sc?.cnpj_cpf || sc?.cnpj || "";
+                      const email = sc?.email || "";
+
                       setForm((f) => ({
                         ...f,
                         shipping_company: name,
-                        shipping_company_cnpj:
-                          sc?.cnpj || f.shipping_company_cnpj || "",
-                        shipping_company_email:
-                          sc?.email || f.shipping_company_email || "",
+                        shipping_company_cnpj: name ? cnpj : "",
+                        shipping_company_email: name ? email : "",
                       }));
                     }}
                   >

@@ -68,7 +68,7 @@ const AppNavbar = () => {
                 Transportadoras
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/risk-managers">
-                Gerenciadores de Risco
+                Gerenciadoras de Risco
               </NavDropdown.Item>
             </NavDropdown>
             {/* {showAdmin && (

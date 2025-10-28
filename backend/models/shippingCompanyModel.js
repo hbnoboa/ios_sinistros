@@ -4,6 +4,7 @@ const shippingCompanySchema = new mongoose.Schema(
   {
     company_name: { type: String, required: true },
     cnpj_cpf: { type: String },
+    email: { type: String },
     rntrc: { type: String },
     drivers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Driver" }],
   },

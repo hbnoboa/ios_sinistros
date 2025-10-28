@@ -75,6 +75,11 @@ const AttendanceEdit = () => {
   const [regulatorsList, setRegulatorsList] = useState([]);
   const [shippers, setShippers] = useState([]);
   const [riskManagers, setRiskManagers] = useState([]);
+  // Estados e cidades (IBGE)
+  const [states, setStates] = useState([]);
+  const [eventCities, setEventCities] = useState([]);
+  const [originCities, setOriginCities] = useState([]);
+  const [destinationCities, setDestinationCities] = useState([]);
   const [err, setErr] = useState("");
   const [saving, setSaving] = useState(false);
   const [key, setKey] = useState("cadastro");
@@ -339,6 +344,58 @@ const AttendanceEdit = () => {
     loadAll();
     // eslint-disable-next-line
   }, []);
+
+  // IBGE: carrega Estados (UF) uma vez
+  useEffect(() => {
+    fetch(
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome"
+    )
+      .then((r) => r.json())
+      .then((data) => setStates(Array.isArray(data) ? data : []))
+      .catch(() => setStates([]));
+  }, []);
+
+  // IBGE: cidades por UF - Evento
+  useEffect(() => {
+    if (!form?.event_state) {
+      setEventCities([]);
+      return;
+    }
+    fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${form.event_state}/municipios`
+    )
+      .then((r) => r.json())
+      .then((data) => setEventCities(Array.isArray(data) ? data : []))
+      .catch(() => setEventCities([]));
+  }, [form?.event_state]);
+
+  // IBGE: cidades por UF - Origem
+  useEffect(() => {
+    if (!form?.origin_state) {
+      setOriginCities([]);
+      return;
+    }
+    fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${form.origin_state}/municipios`
+    )
+      .then((r) => r.json())
+      .then((data) => setOriginCities(Array.isArray(data) ? data : []))
+      .catch(() => setOriginCities([]));
+  }, [form?.origin_state]);
+
+  // IBGE: cidades por UF - Destino
+  useEffect(() => {
+    if (!form?.destination_state) {
+      setDestinationCities([]);
+      return;
+    }
+    fetch(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${form.destination_state}/municipios`
+    )
+      .then((r) => r.json())
+      .then((data) => setDestinationCities(Array.isArray(data) ? data : []))
+      .catch(() => setDestinationCities([]));
+  }, [form?.destination_state]);
 
   if (!form && !err) {
     return (
@@ -662,20 +719,43 @@ const AttendanceEdit = () => {
                   />
                 </Form.Group>
                 <Form.Group as={Col} md="3">
+                  <Form.Label>UF / EVENTO</Form.Label>
+                  <Form.Select
+                    className="bg-dark text-white"
+                    name="event_state"
+                    value={form.event_state || ""}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        event_state: e.target.value,
+                        event_city: "",
+                      }))
+                    }
+                  >
+                    <option value="">Selecione...</option>
+                    {states.map((uf) => (
+                      <option key={uf.id} value={uf.sigla}>
+                        {uf.nome} ({uf.sigla})
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group as={Col} md="3">
                   <Form.Label>CIDADE / EVENTO</Form.Label>
-                  <Form.Control
+                  <Form.Select
+                    className="bg-dark text-white"
                     name="event_city"
                     value={form.event_city || ""}
                     onChange={setField}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} md="3">
-                  <Form.Label>UF / EVENTO</Form.Label>
-                  <Form.Control
-                    name="event_state"
-                    value={form.event_state || ""}
-                    onChange={setField}
-                  />
+                    disabled={!form.event_state}
+                  >
+                    <option value="">Selecione...</option>
+                    {eventCities.map((c) => (
+                      <option key={c.id} value={c.nome}>
+                        {c.nome}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
               </Row>
 
@@ -708,19 +788,23 @@ const AttendanceEdit = () => {
                 <Form.Group as={Col} md="4">
                   <Form.Label>TRANSPORTADOR</Form.Label>
                   <Form.Select
+                    className="bg-dark text-white"
                     value={form.shipping_company || ""}
                     onChange={(e) => {
                       const company = e.target.value;
                       const sc =
                         shippers.find((s) => s.company_name === company) ||
                         null;
+
+                      // fallbacks: CNPJ pode estar em diferentes chaves
+                      const cnpj = sc?.cnpj_cpf || sc?.cnpj || "";
+                      const email = sc?.email || "";
+
                       setForm((f) => ({
                         ...f,
                         shipping_company: company,
-                        shipping_company_cnpj:
-                          sc?.cnpj || f.shipping_company_cnpj || "",
-                        shipping_company_email:
-                          sc?.email || f.shipping_company_email || "",
+                        shipping_company_cnpj: company ? cnpj : "",
+                        shipping_company_email: company ? email : "",
                       }));
                     }}
                   >
@@ -866,20 +950,43 @@ const AttendanceEdit = () => {
                   />
                 </Form.Group>
                 <Form.Group as={Col} md="4">
+                  <Form.Label>UF / ORIGEM</Form.Label>
+                  <Form.Select
+                    className="bg-dark text-white"
+                    name="origin_state"
+                    value={form.origin_state || ""}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        origin_state: e.target.value,
+                        origin_city: "",
+                      }))
+                    }
+                  >
+                    <option value="">Selecione...</option>
+                    {states.map((uf) => (
+                      <option key={uf.id} value={uf.sigla}>
+                        {uf.nome} ({uf.sigla})
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
                   <Form.Label>CIDADE/ORIGEM</Form.Label>
-                  <Form.Control
+                  <Form.Select
+                    className="bg-dark text-white"
                     name="origin_city"
                     value={form.origin_city || ""}
                     onChange={setField}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                  <Form.Label>UF / ORIGEM</Form.Label>
-                  <Form.Control
-                    name="origin_state"
-                    value={form.origin_state || ""}
-                    onChange={setField}
-                  />
+                    disabled={!form.origin_state}
+                  >
+                    <option value="">Selecione...</option>
+                    {originCities.map((c) => (
+                      <option key={c.id} value={c.nome}>
+                        {c.nome}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
               </Row>
 
@@ -893,20 +1000,43 @@ const AttendanceEdit = () => {
                   />
                 </Form.Group>
                 <Form.Group as={Col} md="4">
+                  <Form.Label>UF / DESTINO</Form.Label>
+                  <Form.Select
+                    className="bg-dark text-white"
+                    name="destination_state"
+                    value={form.destination_state || ""}
+                    onChange={(e) =>
+                      setForm((f) => ({
+                        ...f,
+                        destination_state: e.target.value,
+                        destination_city: "",
+                      }))
+                    }
+                  >
+                    <option value="">Selecione...</option>
+                    {states.map((uf) => (
+                      <option key={uf.id} value={uf.sigla}>
+                        {uf.nome} ({uf.sigla})
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
                   <Form.Label>CIDADE/DESTINO</Form.Label>
-                  <Form.Control
+                  <Form.Select
+                    className="bg-dark text-white"
                     name="destination_city"
                     value={form.destination_city || ""}
                     onChange={setField}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                  <Form.Label>UF / DESTINO</Form.Label>
-                  <Form.Control
-                    name="destination_state"
-                    value={form.destination_state || ""}
-                    onChange={setField}
-                  />
+                    disabled={!form.destination_state}
+                  >
+                    <option value="">Selecione...</option>
+                    {destinationCities.map((c) => (
+                      <option key={c.id} value={c.nome}>
+                        {c.nome}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
               </Row>
 

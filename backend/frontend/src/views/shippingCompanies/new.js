@@ -73,6 +73,14 @@ const ShippingCompanyNew = () => {
 
           <Row className="mb-3">
             <Form.Group as={Col} md="4">
+              <Form.Label>EMAIL</Form.Label>
+              <Form.Control
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group as={Col} md="4">
               <Form.Label>RNTRC</Form.Label>
               <Form.Control
                 name="rntrc"
